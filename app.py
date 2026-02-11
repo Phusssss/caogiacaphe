@@ -1,94 +1,53 @@
 """
 Flask API để serve giá cà phê
+Đọc từ file được cập nhật bởi Cron Job
 """
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import json
 import os
 from datetime import datetime
-import asyncio
-from scraper import get_coffee_prices
-import threading
-import time
 
 app = Flask(__name__)
-
-# Cache dữ liệu
-cache = {
-    "data": None,
-    "last_update": None
-}
 
 CACHE_FILE = "coffee_prices_latest.json"
 
 
-def load_cache():
-    """Load cache từ file"""
-    global cache
+def load_data():
+    """Load dữ liệu từ file"""
     if os.path.exists(CACHE_FILE):
         try:
             with open(CACHE_FILE, 'r', encoding='utf-8') as f:
-                cache["data"] = json.load(f)
-                cache["last_update"] = datetime.now()
-                print(f"Loaded cache from {CACHE_FILE}")
+                return json.load(f)
         except Exception as e:
-            print(f"Error loading cache: {e}")
+            print(f"Error loading data: {e}")
+            return None
+    return None
 
 
-def save_cache(data):
-    """Lưu cache vào file"""
-    global cache
+def save_data(data):
+    """Lưu dữ liệu vào file"""
     try:
         with open(CACHE_FILE, 'w', encoding='utf-8') as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
-        cache["data"] = data
-        cache["last_update"] = datetime.now()
-        print(f"Saved cache to {CACHE_FILE}")
+        return True
     except Exception as e:
-        print(f"Error saving cache: {e}")
-
-
-async def scrape_prices():
-    """Scrape giá cà phê"""
-    try:
-        print(f"\n{'='*60}")
-        print(f"Scraping at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        print(f"{'='*60}")
-        
-        data = await get_coffee_prices()
-        save_cache(data)
-        
-        print("\n--- Giá cập nhật ---")
-        for province, price in data["prices"].items():
-            change = data["changes"][province]
-            print(f"{province:15} | {price:>10} | {change:>10}")
-        
-        return data
-    except Exception as e:
-        print(f"Error scraping: {e}")
-        return None
-
-
-def scrape_job():
-    """Background job chạy mỗi 10 phút"""
-    while True:
-        try:
-            asyncio.run(scrape_prices())
-        except Exception as e:
-            print(f"Scrape job error: {e}")
-        
-        # Chờ 10 phút
-        print(f"\nChờ 10 phút đến lần scrape tiếp theo...")
-        time.sleep(600)  # 600 seconds = 10 minutes
+        print(f"Error saving data: {e}")
+        return False
 
 
 @app.route('/')
 def home():
     """Home page"""
+    data = load_data()
+    last_update = data.get('date') if data else 'Chưa có dữ liệu'
+    
     return jsonify({
         "message": "Coffee Price API",
+        "last_update": last_update,
         "endpoints": {
             "/api/coffee-prices": "Get latest coffee prices",
-            "/api/health": "Health check"
+            "/api/health": "Health check",
+            "/update": "Update prices (POST, internal use)"
         }
     })
 
@@ -96,38 +55,42 @@ def home():
 @app.route('/api/coffee-prices')
 def get_prices():
     """API endpoint trả về giá cà phê"""
-    if cache["data"] is None:
+    data = load_data()
+    
+    if data is None:
         return jsonify({
             "error": "Dữ liệu chưa sẵn sàng. Vui lòng thử lại sau vài phút."
         }), 503
     
-    return jsonify(cache["data"])
+    return jsonify(data)
 
 
 @app.route('/api/health')
 def health():
     """Health check endpoint"""
+    data = load_data()
+    
     return jsonify({
         "status": "ok",
-        "last_update": cache["last_update"].isoformat() if cache["last_update"] else None,
-        "has_data": cache["data"] is not None
+        "last_update": data.get('date') if data else None,
+        "has_data": data is not None
     })
 
 
-@app.route('/api/scrape-now')
-def scrape_now():
-    """Trigger scrape ngay lập tức"""
+@app.route('/update', methods=['POST'])
+def update_prices():
+    """Endpoint để cron job update giá (internal use)"""
     try:
-        data = asyncio.run(scrape_prices())
-        if data:
+        data = request.get_json()
+        if save_data(data):
             return jsonify({
                 "status": "success",
-                "data": data
+                "message": "Đã cập nhật giá"
             })
         else:
             return jsonify({
                 "status": "error",
-                "message": "Không thể scrape dữ liệu"
+                "message": "Không thể lưu dữ liệu"
             }), 500
     except Exception as e:
         return jsonify({
@@ -137,13 +100,5 @@ def scrape_now():
 
 
 if __name__ == '__main__':
-    # Load cache khi start
-    load_cache()
-    
-    # Start background scraping job
-    scrape_thread = threading.Thread(target=scrape_job, daemon=True)
-    scrape_thread.start()
-    
-    # Start Flask app
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)

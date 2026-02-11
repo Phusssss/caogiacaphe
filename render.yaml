@@ -1,0 +1,26 @@
+services:
+  # Web Service - API endpoint
+  - type: web
+    name: coffee-price-api
+    env: python
+    region: singapore
+    plan: free
+    buildCommand: "pip install -r requirements.txt && playwright install chromium && playwright install-deps"
+    startCommand: "gunicorn app:app"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+    
+  # Cron Job - Scrape mỗi 10 phút
+  - type: cron
+    name: coffee-price-scraper
+    env: python
+    region: singapore
+    schedule: "*/10 * * * *"
+    buildCommand: "pip install -r requirements.txt && playwright install chromium && playwright install-deps"
+    startCommand: "python scraper_cron.py"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: API_ENDPOINT
+        sync: false
