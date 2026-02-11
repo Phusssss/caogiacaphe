@@ -34,6 +34,15 @@ jobs:
         name: coffee-prices
         path: coffee_prices_*.json
         retention-days: 30
+      if: success()
+    
+    - name: Upload debug files
+      uses: actions/upload-artifact@v4
+      with:
+        name: debug-files
+        path: debug_*.html
+        retention-days: 7
+      if: failure()
     
     # Optional: Commit kết quả vào repo
     - name: Commit results

@@ -14,6 +14,24 @@ async def get_coffee_prices():
     """Lấy giá cà phê từ giacaphe.com"""
     url = "https://giacaphe.com/gia-ca-phe-noi-dia/"
     
+    # Thử tối đa 3 lần
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            return await _scrape_once(url, attempt + 1)
+        except Exception as e:
+            if attempt < max_retries - 1:
+                wait_time = (attempt + 1) * 10
+                print(f"Lần thử {attempt + 1} thất bại. Chờ {wait_time}s rồi thử lại...")
+                await asyncio.sleep(wait_time)
+            else:
+                raise e
+
+
+async def _scrape_once(url, attempt_num):
+    """Thực hiện scrape một lần"""
+    print(f"\n--- Lần thử {attempt_num} ---")
+    
     async with async_playwright() as p:
         # Launch browser với args để bypass detection
         browser = await p.chromium.launch(
@@ -61,9 +79,13 @@ async def get_coffee_prices():
             print("Đang truy cập trang...")
             await page.goto(url, wait_until="domcontentloaded", timeout=60000)
             
-            # Chờ một chút để Cloudflare check
+            # Chờ lâu hơn cho GitHub Actions
             print("Chờ Cloudflare...")
-            await asyncio.sleep(8)
+            await asyncio.sleep(15)
+            
+            # Scroll để trigger events
+            await page.evaluate("window.scrollTo(0, 500)")
+            await asyncio.sleep(3)
             
             # Lấy CSS content
             print("Đang lấy CSS content...")
@@ -81,6 +103,12 @@ async def get_coffee_prices():
             print(f"Tìm thấy {len(values)} giá trị trong CSS")
             
             if len(values) < 8:
+                # Lưu HTML để debug
+                html = await page.content()
+                debug_file = f"debug_fail_attempt_{attempt_num}.html"
+                with open(debug_file, "w", encoding="utf-8") as f:
+                    f.write(html)
+                print(f"Đã lưu HTML vào {debug_file}")
                 raise Exception(f"Không tìm đủ dữ liệu giá (chỉ tìm thấy {len(values)} giá trị)")
             
             # Parse dữ liệu
