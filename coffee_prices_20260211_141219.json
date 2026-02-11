@@ -1,0 +1,206 @@
+{
+  "timestamp": "2026-02-11T14:12:18.462442",
+  "trung_binh": {
+    "gia": "Trung bình\n\n95,400đ/kg\n-1,000",
+    "thay_doi": "N/A"
+  },
+  "thi_truong": [
+    {
+      "ten": "Đắk Lắk",
+      "gia": "",
+      "thay_doi": ""
+    },
+    {
+      "ten": "Lâm Đồng",
+      "gia": "",
+      "thay_doi": ""
+    },
+    {
+      "ten": "Gia Lai",
+      "gia": "",
+      "thay_doi": ""
+    },
+    {
+      "ten": "Đắk Nông",
+      "gia": "",
+      "thay_doi": ""
+    },
+    {
+      "ten": "Hồ tiêu",
+      "gia": "",
+      "thay_doi": ""
+    },
+    {
+      "ten": "Tỷ giá USD/VND",
+      "gia": "",
+      "thay_doi": ""
+    },
+    {
+      "ten": "Theo:",
+      "gia": "giacaphe.com",
+      "thay_doi": ""
+    },
+    {
+      "ten": "03/26",
+      "gia": "3,743",
+      "thay_doi": "-91\n-2.36%"
+    },
+    {
+      "ten": "05/26",
+      "gia": "3,683",
+      "thay_doi": "-87\n-2.30%"
+    },
+    {
+      "ten": "07/26",
+      "gia": "3,592",
+      "thay_doi": "-86\n-2.33%"
+    },
+    {
+      "ten": "09/26",
+      "gia": "3,522",
+      "thay_doi": "-77\n-2.14%"
+    },
+    {
+      "ten": "11/26",
+      "gia": "3,451",
+      "thay_doi": "-65\n-1.84%"
+    },
+    {
+      "ten": "03/26",
+      "gia": "294.20",
+      "thay_doi": "-5.65\n-1.87%"
+    },
+    {
+      "ten": "05/26",
+      "gia": "290.70",
+      "thay_doi": "-3.15\n-1.06%"
+    },
+    {
+      "ten": "07/26",
+      "gia": "285.40",
+      "thay_doi": "-3.20\n-1.10%"
+    },
+    {
+      "ten": "09/26",
+      "gia": "280.80",
+      "thay_doi": "-3.20\n-1.12%"
+    },
+    {
+      "ten": "12/26",
+      "gia": "276.65",
+      "thay_doi": "-3.15\n-1.12%"
+    }
+  ],
+  "robusta_london": [
+    {
+      "ky_han": "03/26",
+      "gia_khop": "3,743",
+      "thay_doi": "-91\n-2.36%",
+      "cao_nhat": "3,865\n+31",
+      "thap_nhat": "3,726\n-108",
+      "khoi_luong": "4,663",
+      "mo_cua": "3,843",
+      "hom_truoc": "3,834",
+      "hd_mo": "20,714"
+    },
+    {
+      "ky_han": "05/26",
+      "gia_khop": "3,683",
+      "thay_doi": "-87\n-2.30%",
+      "cao_nhat": "3,802\n+32",
+      "thap_nhat": "3,668\n-102",
+      "khoi_luong": "11,773",
+      "mo_cua": "3,800",
+      "hom_truoc": "3,770",
+      "hd_mo": "37,540"
+    },
+    {
+      "ky_han": "07/26",
+      "gia_khop": "3,592",
+      "thay_doi": "-86\n-2.33%",
+      "cao_nhat": "3,706\n+28",
+      "thap_nhat": "3,576\n-102",
+      "khoi_luong": "5,428",
+      "mo_cua": "3,703",
+      "hom_truoc": "3,678",
+      "hd_mo": "13,534"
+    },
+    {
+      "ky_han": "09/26",
+      "gia_khop": "3,522",
+      "thay_doi": "-77\n-2.14%",
+      "cao_nhat": "3,624\n+25",
+      "thap_nhat": "3,505\n-94",
+      "khoi_luong": "1,631",
+      "mo_cua": "3,610",
+      "hom_truoc": "3,599",
+      "hd_mo": "5,755"
+    },
+    {
+      "ky_han": "11/26",
+      "gia_khop": "3,451",
+      "thay_doi": "-65\n-1.84%",
+      "cao_nhat": "3,539\n+23",
+      "thap_nhat": "3,432\n-84",
+      "khoi_luong": "731",
+      "mo_cua": "3,530",
+      "hom_truoc": "3,516",
+      "hd_mo": "2,970"
+    },
+    {
+      "ky_han": "03/26",
+      "gia_khop": "294.20",
+      "thay_doi": "-5.65\n-1.87%",
+      "cao_nhat": "304.00\n+4.15",
+      "thap_nhat": "292.60\n-7.25",
+      "khoi_luong": "21,616",
+      "mo_cua": "301.35",
+      "hom_truoc": "299.85",
+      "hd_mo": "37,454"
+    },
+    {
+      "ky_han": "05/26",
+      "gia_khop": "290.70",
+      "thay_doi": "-3.15\n-1.06%",
+      "cao_nhat": "297.90\n+4.05",
+      "thap_nhat": "289.05\n-4.80",
+      "khoi_luong": "31,416",
+      "mo_cua": "295.30",
+      "hom_truoc": "293.85",
+      "hd_mo": "72,452"
+    },
+    {
+      "ky_han": "07/26",
+      "gia_khop": "285.40",
+      "thay_doi": "-3.20\n-1.10%",
+      "cao_nhat": "292.00\n+3.40",
+      "thap_nhat": "283.75\n-4.85",
+      "khoi_luong": "10,676",
+      "mo_cua": "289.95",
+      "hom_truoc": "288.60",
+      "hd_mo": "28,628"
+    },
+    {
+      "ky_han": "09/26",
+      "gia_khop": "280.80",
+      "thay_doi": "-3.20\n-1.12%",
+      "cao_nhat": "286.95\n+2.95",
+      "thap_nhat": "279.15\n-4.85",
+      "khoi_luong": "5,268",
+      "mo_cua": "286.10",
+      "hom_truoc": "284.00",
+      "hd_mo": "16,215"
+    },
+    {
+      "ky_han": "12/26",
+      "gia_khop": "276.65",
+      "thay_doi": "-3.15\n-1.12%",
+      "cao_nhat": "282.55\n+2.75",
+      "thap_nhat": "275.10\n-4.70",
+      "khoi_luong": "2,373",
+      "mo_cua": "282.00",
+      "hom_truoc": "279.80",
+      "hd_mo": "15,435"
+    }
+  ]
+}

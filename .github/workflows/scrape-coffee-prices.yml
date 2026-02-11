@@ -1,0 +1,46 @@
+name: Scrape Coffee Prices
+
+on:
+  schedule:
+    # Chạy mỗi ngày lúc 8:00 AM (UTC+7 = 1:00 AM UTC)
+    - cron: '0 1 * * *'
+  workflow_dispatch: # Cho phép chạy thủ công
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        playwright install chromium
+        playwright install-deps
+    
+    - name: Run scraper
+      run: python scraper.py
+    
+    - name: Upload results
+      uses: actions/upload-artifact@v3
+      with:
+        name: coffee-prices
+        path: coffee_prices_*.json
+        retention-days: 30
+    
+    # Optional: Commit kết quả vào repo
+    - name: Commit results
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add coffee_prices_*.json
+        git diff --quiet && git diff --staged --quiet || git commit -m "Update coffee prices $(date +'%Y-%m-%d %H:%M:%S')"
+        git push
+      continue-on-error: true

@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-02-11T14:17:23.416698",
+  "trung_binh": {
+    "gia": "95,400đ/kg",
+    "thay_doi": "-1,000"
+  },
+  "thi_truong": [],
+  "robusta_london": [
+    {
+      "ky_han": "03/26",
+      "gia_khop": "3,743",
+      "thay_doi": "-91 -2.36%"
+    },
+    {
+      "ky_han": "05/26",
+      "gia_khop": "3,683",
+      "thay_doi": "-87 -2.30%"
+    },
+    {
+      "ky_han": "07/26",
+      "gia_khop": "3,592",
+      "thay_doi": "-86 -2.33%"
+    },
+    {
+      "ky_han": "09/26",
+      "gia_khop": "3,522",
+      "thay_doi": "-77 -2.14%"
+    },
+    {
+      "ky_han": "11/26",
+      "gia_khop": "3,451",
+      "thay_doi": "-65 -1.84%"
+    }
+  ]
+}
