@@ -81,13 +81,24 @@ async def _scrape_once(url, attempt_num):
             
             # Chờ lâu hơn cho GitHub Actions
             print("Chờ Cloudflare...")
-            await asyncio.sleep(15)
+            await asyncio.sleep(20)
+            
+            # Chờ network idle
+            try:
+                await page.wait_for_load_state("networkidle", timeout=10000)
+            except:
+                pass
             
             # Scroll để trigger events
             await page.evaluate("window.scrollTo(0, 500)")
             await asyncio.sleep(3)
+            await page.evaluate("window.scrollTo(0, 1000)")
+            await asyncio.sleep(2)
             
-            # Lấy CSS content
+            # Screenshot để debug
+            await page.screenshot(path=f"debug_screenshot_{attempt_num}.png")
+            
+            # Phương pháp 1: Lấy CSS content
             print("Đang lấy CSS content...")
             css_content = await page.evaluate("""
                 () => {
@@ -97,10 +108,61 @@ async def _scrape_once(url, attempt_num):
             """)
             
             # Tìm giá trong CSS
-            pattern = re.compile(r"::after\s*{\s*content:\s*'([^']+)'")
+            pattern = re.compile(r"::after\s*{\s*content:\s*['\"]([^'\"]+)['\"]")
             values = pattern.findall(css_content)
             
-            print(f"Tìm thấy {len(values)} giá trị trong CSS")
+            print(f"Phương pháp 1 (CSS): Tìm thấy {len(values)} giá trị")
+            
+            # Phương pháp 2: Lấy trực tiếp từ computed style
+            if len(values) < 8:
+                print("Thử phương pháp 2 (Computed Style)...")
+                values = await page.evaluate("""
+                    () => {
+                        const results = [];
+                        const elements = document.querySelectorAll('.price-value, .price-change, [class*="price"]');
+                        
+                        elements.forEach(el => {
+                            // Lấy ::after content
+                            const after = window.getComputedStyle(el, '::after').content;
+                            if (after && after !== 'none' && after !== '""') {
+                                results.push(after.replace(/['"]/g, ''));
+                            }
+                            
+                            // Lấy text content
+                            const text = el.textContent.trim();
+                            if (text && text.match(/[\d,\.\-\+]+/)) {
+                                results.push(text);
+                            }
+                        });
+                        
+                        return results;
+                    }
+                """)
+                print(f"Phương pháp 2: Tìm thấy {len(values)} giá trị")
+            
+            # Phương pháp 3: Tìm tất cả elements có class chứa "price"
+            if len(values) < 8:
+                print("Thử phương pháp 3 (All price elements)...")
+                all_text = await page.evaluate("""
+                    () => {
+                        const results = [];
+                        const allElements = document.querySelectorAll('*');
+                        
+                        allElements.forEach(el => {
+                            const className = el.className || '';
+                            if (typeof className === 'string' && className.toLowerCase().includes('price')) {
+                                const after = window.getComputedStyle(el, '::after').content;
+                                if (after && after !== 'none' && after !== '""') {
+                                    results.push(after.replace(/['"]/g, ''));
+                                }
+                            }
+                        });
+                        
+                        return results;
+                    }
+                """)
+                values.extend(all_text)
+                print(f"Phương pháp 3: Tổng cộng {len(values)} giá trị")
             
             if len(values) < 8:
                 # Lưu HTML để debug

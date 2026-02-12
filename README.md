@@ -1,6 +1,27 @@
-# Coffee Price Scraper
+# ☕ Coffee Price Scraper
 
-Tool cào giá cà phê từ giacaphe.com sử dụng Playwright để bypass Cloudflare protection.
+Tool cào giá cà phê từ giacaphe.com - **Tự động chạy mỗi ngày và lưu vào Google Sheets**
+
+## 🚀 Setup Tự động (Khuyên dùng)
+
+**Đọc file: `HUONG_DAN_TU_DONG.md`** - Chỉ 3 bước, 8 phút setup xong!
+
+Hệ thống sẽ:
+- ✅ Tự động scrape mỗi ngày lúc 8:00 sáng
+- ✅ Lưu vào Google Sheets
+- ✅ Hoàn toàn miễn phí (GitHub Actions + Google Apps Script)
+- ✅ Không cần server, không cần hosting
+
+## 📁 Files quan trọng
+
+- **`HUONG_DAN_TU_DONG.md`** - Hướng dẫn setup tự động (ĐỌC FILE NÀY!)
+- `scraper_to_sheets.py` - Script chính gửi dữ liệu lên Google Sheets
+- `google-apps-script/api-only.gs` - Code Google Apps Script
+- `.github/workflows/scrape-coffee-prices.yml` - GitHub Actions workflow
+
+---
+
+## 💻 Chạy thủ công trên máy local
 
 ## Cài đặt
 

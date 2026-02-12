@@ -1,0 +1,30 @@
+name: Scrape to Google Sheets
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # Mỗi 10 phút
+  workflow_dispatch:  # Cho phép chạy thủ công
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        playwright install chromium
+        playwright install-deps
+    
+    - name: Run scraper
+      env:
+        APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+      run: python scraper_to_sheets.py
